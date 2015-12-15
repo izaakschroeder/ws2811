@@ -9,7 +9,7 @@
   group: name=ws2811 state=present
 
 - name: ensure ws2811 user exists
-  user: name=ws2811 state=present group=ws2811 groups=gpio
+  user: name=ws2811 state=present group=ws2811 groups=gpio,users
 
 - name: create ws2811 data directory
   file: path=/var/lib/ws2811 state=directory owner=ws2811 group=ws2811

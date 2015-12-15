@@ -26,3 +26,9 @@ const layout = [
 for (let i = 0; i < layout.length; ++i) {
   pru.data.writeUInt32LE(layout[i], i * 4);
 }
+
+for (let i = 0; i < 400; ++i) {
+  pixels.writeUInt32LE(0, i * 4);
+}
+
+pru.run('./firmware/firmware.bin');
