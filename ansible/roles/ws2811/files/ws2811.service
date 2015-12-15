@@ -6,7 +6,7 @@ Requires=net.service
 
 [Service]
 User=nobody
-Group=nobody
+Group=nogroup
 EnvironmentFile=/etc/environment
 ExecStart=/usr/bin/node dist/server
 WorkingDirectory=/opt/ws2811
