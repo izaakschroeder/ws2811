@@ -1,0 +1,8 @@
+{
+	"name": "ws2811",
+	"version": "0.1.0",
+	"main": "lib/ws2811.js",
+	"dependencies": {
+		"pruss": "^0.1.0"
+	}
+}

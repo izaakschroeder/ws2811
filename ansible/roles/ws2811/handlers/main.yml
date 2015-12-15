@@ -1,0 +1,5 @@
+- name: restart ws2811
+  service: name=ws2811 state=restarted
+
+- name: reload systemd
+  command: systemctl --system daemon-reload

@@ -1,0 +1,15 @@
+[Unit]
+Description=ws2811 driver
+Documentation=https://github.com/izaakschroeder/ws2811
+After=net.service
+Requires=net.service
+
+[Service]
+EnvironmentFile=/etc/environment
+ExecStart=npm start
+WorkingDirectory=/opt/ws2811
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

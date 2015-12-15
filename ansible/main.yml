@@ -1,0 +1,6 @@
+- hosts: all
+  become: yes
+  roles:
+    #- beaglebone
+    #- nodejs
+    - ws2811

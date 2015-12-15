@@ -1,0 +1,37 @@
+
+- name: check apt last update
+  stat: path=/var/cache/apt
+  register: apt_cache_stat
+
+- name: update apt if needed
+  apt: update_cache=yes upgrade=dist
+  when: ansible_date_time.epoch|float - apt_cache_stat.stat.mtime > 60*60*12
+
+- name: install `lsb-release`
+  apt: name=lsb-release state=latest
+
+- name: install `git`
+  apt: name=git state=latest
+
+- name: upgrade kernel
+  shell: /opt/scripts/tools/update_kernel.sh --experimental --bone-channel
+#
+# - name: restart machine
+#   shell: "sleep 2; shutdown -r now 'Ansible updates triggered'"
+#   async: 1
+#   poll: 0
+#   ignore_errors: true
+#   changed_when: true
+#
+# - name: waiting for server to come back
+#   local_action: wait_for host={{ inventory_hostname }} state=started port={{ ansible_ssh_port | default(22, True) }}
+#   become: false
+
+- name: setup overlays repository
+  git: repo=https://github.com/beagleboard/bb.org-overlays dest=/opt/overlays
+
+- name: install latest `dtc` tool
+  shell: /opt/overlays/dtc-overlay.sh
+
+- name: install latest overlays
+  shell: /opt/overlays/install.sh chdir=/opt/overlays/
