@@ -1,12 +1,11 @@
 [Unit]
 Description=ws2811 driver
 Documentation=https://github.com/izaakschroeder/ws2811
-After=net.service
-Requires=net.service
+After=network.target
 
 [Service]
-User=nobody
-Group=nogroup
+User=ws2811
+Group=ws2811
 EnvironmentFile=/etc/environment
 ExecStart=/usr/bin/node dist/server
 WorkingDirectory=/opt/ws2811

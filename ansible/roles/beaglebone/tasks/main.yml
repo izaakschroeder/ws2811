@@ -13,8 +13,8 @@
 - name: install `git`
   apt: name=git state=latest
 
-- name: upgrade kernel
-  shell: /opt/scripts/tools/update_kernel.sh --experimental --bone-channel
+# - name: upgrade kernel
+#   shell: /opt/scripts/tools/update_kernel.sh --testing --bone-channel
 #
 # - name: restart machine
 #   shell: "sleep 2; shutdown -r now 'Ansible updates triggered'"
@@ -35,3 +35,9 @@
 
 - name: install latest overlays
   shell: /opt/overlays/install.sh chdir=/opt/overlays/
+
+- name: ensure gpio group exists
+  group: name=gpio state=present
+
+- name: copy udev rules
+  copy: src=90-gpio.rules dest=/etc/udev/rules.d

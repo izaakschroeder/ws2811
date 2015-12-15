@@ -5,8 +5,14 @@
 - name: setup `ws2811` repository
   git: repo=https://github.com/izaakschroeder/ws2811 dest=/opt/ws2811
 
+- name: ensure ws2811 group exists
+  group: name=ws2811 state=present
+
+- name: ensure ws2811 user exists
+  user: name=ws2811 state=present group=ws2811 groups=gpio
+
 - name: create ws2811 data directory
-  file: path=/var/lib/ws2811 state=directory owner=nobody group=nobody
+  file: path=/var/lib/ws2811 state=directory owner=ws2811 group=ws2811
 
 - name: install node_modules
   npm: path=/opt/ws2811
