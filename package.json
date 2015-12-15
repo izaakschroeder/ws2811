@@ -2,7 +2,16 @@
 	"name": "ws2811",
 	"version": "0.1.0",
 	"main": "lib/ws2811.js",
+	"scripts": {
+		"postinstall": "./node_modules/.bin/babel -d dist src/"
+	},
 	"dependencies": {
-		"pruss": "^0.1.0"
+		"pruss": "^0.1.0",
+		"babel-cli": "^6.0.2",
+    "babel-preset-metalab": "^0.1.2"
+	},
+	"devDependencies": {
+		"eslint": "^1.8.0",
+    "eslint-config-metalab": "^1.0.0-rc.1"
 	}
 }

@@ -5,11 +5,14 @@ After=net.service
 Requires=net.service
 
 [Service]
+User=nobody
+Group=nobody
 EnvironmentFile=/etc/environment
-ExecStart=npm start
+ExecStart=/usr/bin/node dist/server
 WorkingDirectory=/opt/ws2811
 Restart=on-failure
 RestartSec=5
+
 
 [Install]
 WantedBy=multi-user.target

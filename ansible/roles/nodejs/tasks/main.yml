@@ -1,19 +1,12 @@
 
+- name: add nodejs repository key
+  apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present
 
-- name: install `git`
-  apt: name=git state=latest
+- name: add nodejs repository
+  copy: src=nodesource.list dest=/etc/apt/sources.list.d/nodesource.list
 
-- name: setup `nvm` repository
-  git: repo=https://github.com/creationix/nvm dest=/opt/nvm
+- name: install nodejs
+  apt: name=apt-transport-https state=present
 
-- name: create `node` directory
-  file: path=/usr/local/node state=directory mode=0755
-
-- name: setup `nvm` profile.d entry
-  copy: src=nodejs.sh dest=/etc/profile.d/nodejs.sh owner=root group=root mode=0644
-
-- name: install `nodejs`
-  shell: . /etc/profile.d/nodejs.sh && nvm install 5.2.0
-
-- name: set default `nodejs` version to `5.2.0`
-  shell: . /etc/profile.d/nodejs.sh && nvm alias default 5.2.0
+- name: install nodejs
+  apt: name=nodejs update_cache=True state=present
