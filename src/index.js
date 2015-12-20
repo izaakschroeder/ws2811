@@ -1,19 +1,23 @@
 
-import pruss from 'pruss';
-import { set as layout } from './lib/layout';
-
-const pru = pruss.prus[0];
+import { set as layout, draw } from './lib/layout';
 
 const res = layout({
   P9_24: 500,
 });
 
-const pixels = res.P9_24.data;
+const pixels = res.pins.P9_24.data;
 
-for (let i = 0; i < pixels.length / 4; ++i) {
-  pixels.writeUInt32LE(0x00FF0000, i * 4);
-}
+const colors = [
+  0x00FF0000,
+  0xFF000000,
+];
 
-console.log(res);
+let tick = 0;
 
-pru.run('./firmware/firmware.bin');
+setInterval(function() {
+  ++tick;
+  for (let i = 0; i < pixels.length / 4; ++i) {
+    pixels.writeUInt32LE(tick % 2 === 0 ? colors[0] : colors[1], i * 4);
+  }
+  draw();
+}, 1000);

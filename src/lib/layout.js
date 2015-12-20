@@ -5,6 +5,12 @@ import pins from './pins';
 
 const pru = pruss.prus[0];
 
+pru.load('./firmware/firmware.bin');
+
+export function draw() {
+  pru.enabled = true;
+}
+
 export function get() {
   let offset = 8;
   const count = pru.data.readUInt32LE(0);
