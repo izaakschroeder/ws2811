@@ -9,17 +9,17 @@ export function get() {
   let offset = 0;
   let count = 0;
   const layout = [ ];
-  while ((count = pru.data.readUint32LE(offset))) {
-    const port = pru.data.readUint32LE(offset + 4);
-    const mask = pru.data.readUint32LE(offset + 8);
+  while ((count = pru.data.readUInt32LE(offset))) {
+    const port = pru.data.readUInt32LE(offset + 4);
+    const mask = pru.data.readUInt32LE(offset + 8);
     const pin = find(pins, pin => pin.port === port && pin.mask === mask);
     if (!pin) {
       throw new Error(`Invalid layout state; no matching pin: ${pin}.`);
     }
     const data = range(count).map(i => {
       return {
-        address: pru.data.readUint32LE((offset + 12) + (i * 8)),
-        length: pru.data.readUint32LE((offset + 12) + (i * 8) + 4),
+        address: pru.data.readUInt32LE((offset + 12) + (i * 8)),
+        length: pru.data.readUInt32LE((offset + 12) + (i * 8) + 4),
       };
     });
     layout.push({
