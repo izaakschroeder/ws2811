@@ -3,7 +3,7 @@
   apt: name=git state=latest
 
 - name: setup `ws2811` repository
-  git: repo=https://github.com/izaakschroeder/ws2811 dest=/opt/ws2811
+  git: repo=https://github.com/izaakschroeder/ws2811 dest=/opt/ws2811 force=yes
 
 - name: ensure ws2811 group exists
   group: name=ws2811 state=present

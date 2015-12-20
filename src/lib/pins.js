@@ -89,4 +89,4 @@ export class Pin {
   }
 }
 
-export default pins.map(Pin);
+export default pins.map(pin => new Pin(pin));
