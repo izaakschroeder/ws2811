@@ -41,7 +41,9 @@ START:
   ADD r0, r0, 8
 LIST:
   // if len is 0 then we've reached terminal list
-  QBEQ WAIT, r14, 0
+  QBEQ DONE, r14, 0
+  // We've processed one entry
+  SUB r14, r14, 1
 	// copy 4 ints to r1, r2, r3, r4 (port, mask, address, length)
 	LBBO &r1, r0, 0, 16
 
@@ -93,15 +95,10 @@ LIST:
 		// Keep processing if we have not yet reached the last pixel
 		QBLT PIXEL, r4, r3
 
-  // We've processed one entry
-  SUB r14, r14, 1
+
 	// Continue list processing
 	QBA LIST
 
 
-WAIT:
-// Wait some time
-TIMECONTROL
-AT 60000, _TRES
-
+DONE:
 HALT

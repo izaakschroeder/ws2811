@@ -8,7 +8,7 @@ const pru = pruss.prus[0];
 export function get() {
   let offset = 8;
   const count = pru.data.readUInt32LE(0);
-  const xx = pru.data.readUInt32LE(4);
+  const base = pru.data.readUInt32LE(4);
   const layout = { };
   for (let i = 0; i < count; ++i) {
     const port = pru.data.readUInt32LE(offset);
@@ -25,7 +25,11 @@ export function get() {
     };
     offset += 16;
   }
-  return layout;
+  return {
+    pins: layout,
+    length: count,
+    base,
+  };
 }
 
 export function set(layout) {

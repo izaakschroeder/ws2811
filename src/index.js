@@ -8,7 +8,7 @@ const res = layout({
   P9_24: 500,
 });
 
-const pixels = res[0].buffers[0];
+const pixels = res.P9_24.data;
 
 for (let i = 0; i < pixels.length / 4; ++i) {
   pixels.writeUInt32LE(0x00FF0000, i * 4);
