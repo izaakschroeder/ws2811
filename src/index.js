@@ -11,7 +11,7 @@ const res = layout({
 const pixels = res[0].buffers[0];
 
 for (let i = 0; i < pixels.length / 4; ++i) {
-  pixels.writeUInt32LE(0xFFFF0000, i * 4);
+  pixels.writeUInt32LE(0x00FF0000, i * 4);
 }
 
 console.log(res);
