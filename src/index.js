@@ -1,10 +1,10 @@
 
 import pruss from 'pruss';
-import layout from './lib/layout';
+import { set as layout } from './lib/layout';
 
 const pru = pruss.prus[0];
 
-const res = layout.set({
+const res = layout({
   P9_24: 500,
 });
 

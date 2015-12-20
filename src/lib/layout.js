@@ -41,7 +41,7 @@ export function set(layout) {
     if (!pin) {
       throw new Error(`No such pin: ${pinId}.`);
     }
-    pin.direction('out');
+    pin.direction = 'out';
     pru.data.writeUInt32LE(data.length, offset);
     pru.data.writeUInt32LE(pin.port, offset + 4);
     pru.data.writeUInt32LE(pin.mask, offset + 8);
