@@ -3,7 +3,8 @@
 	"version": "0.1.0",
 	"main": "lib/ws2811.js",
 	"scripts": {
-		"postinstall": "./node_modules/.bin/babel -d dist src/"
+		"postinstall": "./node_modules/.bin/babel -d dist src/",
+		"test": "echo wewt"
 	},
 	"dependencies": {
 		"pruss": "^0.1.0",

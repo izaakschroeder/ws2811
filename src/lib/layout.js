@@ -16,15 +16,16 @@ export function get() {
     if (!pin) {
       throw new Error(`Invalid layout state; no matching pin: ${pin}.`);
     }
-    const data = range(count).map(i => {
-      return {
-        address: pru.data.readUInt32LE((offset + 12) + (i * 8)),
-        length: pru.data.readUInt32LE((offset + 12) + (i * 8) + 4),
-      };
+    const buffers = range(count).map(i => {
+      const address = pru.data.readUInt32LE((offset + 12) + (i * 8));
+      const length = pru.data.readUInt32LE((offset + 12) + (i * 8) + 4);
+      const start = pru.l3.address - address;
+      const end = start + length;
+      return pru.l3.slice(start, end);
     });
     layout.push({
       pin,
-      data,
+      buffers,
     });
     offset += (3 + count * 2) * 4;
   }
