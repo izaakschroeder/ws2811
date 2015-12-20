@@ -93,7 +93,7 @@ LIST:
 		// data of the next pixel
 		ADD r4, r4, 4
 		// Keep processing if we have not yet reached the last pixel
-		QBLT PIXEL, r4, r1
+		QBLT PIXEL, r1, r4
 
 
 	// Continue list processing
