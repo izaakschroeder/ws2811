@@ -1,12 +1,10 @@
 
 import express from 'express';
 
-import layout from './route/layout';
 import pins from './route/pins';
 
 const app = express();
 
-app.use('/layout', layout);
 app.use('/pins', pins);
 
 app.listen(process.env.PORT || 8080);
