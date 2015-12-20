@@ -8,6 +8,7 @@ const pru = pruss.prus[0];
 pru.load('./firmware/firmware.bin');
 
 export function draw() {
+  pru.startAddress = 0x0;
   pru.enabled = true;
 }
 
