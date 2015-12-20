@@ -36,7 +36,7 @@ export function set(layout) {
   let offset = 0;
   let address = pru.l3.address;
   Object.keys(layout).forEach(pinId => {
-    const length = layout[pinId];
+    const length = layout[pinId] * 4;
     const data = [ { address, length } ];
     const pin = find(pins, pin => pin.key === pinId);
     if (!pin) {

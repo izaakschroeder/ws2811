@@ -10,7 +10,7 @@ const res = layout({
 
 const pixels = res[0].buffers[0];
 
-for (let i = 0; i < pixels.length; ++i) {
+for (let i = 0; i < pixels.length / 4; ++i) {
   pixels.writeUInt32LE(0xFFFF0000, i * 4);
 }
 
