@@ -72,8 +72,10 @@ export class Pin {
     }
     writeFileSync(
       `/sys/class/gpio/gpio${this.gpio}/direction`,
-      'utf8',
-      direction
+      direction,
+      {
+        encoding: 'utf8',
+      }
     );
   }
 
@@ -85,7 +87,9 @@ export class Pin {
   }
 
   set value(value) {
-    writeFileSync(`/sys/class/gpio/gpio${this.gpio}/value`, 'utf8', value);
+    writeFileSync(`/sys/class/gpio/gpio${this.gpio}/value`, value, {
+      encoding: 'utf8',
+    });
   }
 }
 
