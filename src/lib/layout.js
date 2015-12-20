@@ -1,5 +1,5 @@
 import pruss from 'pruss';
-import { find, range } from 'lodash';
+import { find } from 'lodash';
 
 import pins from './pins';
 
@@ -11,10 +11,10 @@ export function get() {
   const base = pru.data.readUInt32LE(4);
   const layout = { };
   for (let i = 0; i < count; ++i) {
-    const port = pru.data.readUInt32LE(offset);
-    const mask = pru.data.readUInt32LE(offset + 4);
-    const start = pru.data.readUInt32LE(offset + 8);
-    const length = pru.data.readUInt32LE(offset + 12);
+    const length = pru.data.readUInt32LE(offset + 0);
+    const port = pru.data.readUInt32LE(offset + 4);
+    const mask = pru.data.readUInt32LE(offset + 8);
+    const start = pru.data.readUInt32LE(offset + 12);
     const pin = find(pins, pin => pin.port === port && pin.mask === mask);
     if (!pin) {
       throw new Error(`Invalid layout state; no matching pin: ${pin}.`);
@@ -45,10 +45,10 @@ export function set(layout) {
       throw new Error(`No such pin: ${pinId}.`);
     }
     pin.direction = 'out';
-    pru.data.writeUInt32LE(pin.port, offset + 0);
-    pru.data.writeUInt32LE(pin.mask, offset + 4);
-    pru.data.writeUInt32LE(address, offset + 8);
-    pru.data.writeUInt32LE(length, offset + 12);
+    pru.data.writeUInt32LE(length, offset + 0);
+    pru.data.writeUInt32LE(pin.port, offset + 4);
+    pru.data.writeUInt32LE(pin.mask, offset + 8);
+    pru.data.writeUInt32LE(address, offset + 12);
     offset += 16;
     address += length * 4;
   });

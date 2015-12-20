@@ -22,11 +22,11 @@ routes.param('pin', (req, res, next, id) => {
   next();
 });
 
-routes.patch('/:pin', (req, res) => {
+routes.patch('/:pin/state', (req, res) => {
 
 });
 
-routes.put('/:pin', (req, res) => {
+routes.put('/:pin/state', (req, res) => {
   const pin = req.pin;
   for (let i = 0; i < req.body.length; ++i) {
     pin.data.writeUInt32LE(req.body[i], i * 4);
@@ -34,7 +34,7 @@ routes.put('/:pin', (req, res) => {
   res.send(200);
 });
 
-routes.get('/:pin', (req, res) => {
+routes.get('/:pin/state', (req, res) => {
   res.send(req.pin.data);
 });
 

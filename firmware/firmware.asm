@@ -44,20 +44,20 @@ LIST:
   QBEQ DONE, r14, 0
   // We've processed one entry
   SUB r14, r14, 1
-	// copy 4 ints to r1, r2, r3, r4 (port, mask, address, length)
+	// copy 4 ints to r1, r2, r3, r4 (length, port, mask, address)
 	LBBO &r1, r0, 0, 16
 
   // add the buffer offset to the address
-  ADD r3, r3, r15
+  ADD r4, r4, r15
 
 	// Multiply length by 4 to get length in bytes
-	LSL r4, r4, 2
+	LSL r1, r1, 2
 	// Calculate last address as r5
-	ADD r4, r4, r3
+	ADD r1, r1, r4
 
 	PIXEL:
 		// Read pixel data into r11
-		LBBO &r11, r3, 0, 4
+		LBBO &r11, r4, 0, 4
 		//MOV r11, 0xFF00FF00
 		// Start processing at bit 32
 		MOV r6, 32
@@ -91,9 +91,9 @@ LIST:
 
 		// Increment the address of current pixel data by 4 to get the
 		// data of the next pixel
-		ADD r3, r3, 4
+		ADD r4, r4, 4
 		// Keep processing if we have not yet reached the last pixel
-		QBLT PIXEL, r4, r3
+		QBLT PIXEL, r4, r1
 
 
 	// Continue list processing
