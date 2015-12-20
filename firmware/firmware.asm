@@ -67,14 +67,14 @@ LIST:
 			ADD r18, r2, r21
 			TIMECONTROL
 			//wait until T0 has passed (@0ns) and
-			SBBO r5, r18, 0, 4
+			SBBO r3, r18, 0, 4
 			// And then the CLEAR data out pin
 			ADD r18, r2, r22
 
 			SUB r6, r6, 1
 			MOV r13, 0
       QBBS NEXT, r11, r6
-      MOV r13, r5
+      MOV r13, r3
       NEXT:
 
 			//wait until T0H has passed (@250ns)
