@@ -1,79 +1,27 @@
+'use strict';
 
-import express from 'express';
-import levelup from 'levelup';
-import leveldown from 'leveldown';
+var _express = require('express');
 
-const db = levelup('/var/lib/ws2811/db', {
-  keyEncoding: 'utf8',
-  valueEncoding: 'json'
-});
+var _express2 = _interopRequireDefault(_express);
 
-const NODE_STATE = {
-  OFF: 0
-};
+var _layout = require('./route/layout');
 
-let state = NODE_STATE.OFF;
+var _layout2 = _interopRequireDefault(_layout);
 
-app.get('/layout', (req, res) => {});
+var _channel = require('./route/channel');
 
-app.put('/layout', (req, res) => {});
+var _channel2 = _interopRequireDefault(_channel);
 
-app.get('/channels', (req, res) => {});
+var _pins = require('./route/pins');
 
-app.get('/channel/:channel', (req, res) => {});
+var _pins2 = _interopRequireDefault(_pins);
 
-app.get('/channel/:channel/state', (req, res) => {});
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-app.put('/channel/:channel', (req, res) => {});
+var app = (0, _express2.default)();
 
-app.put('/channel/:channel/state', (req, res) => {});
+app.use('/layout', _layout2.default);
+app.use('/channel', _channel2.default);
+app.use('/pins', _pins2.default);
 
-app.put('/sequence/:sequence', (req, res) => {});
-
-app.post('/play', () => {});
-
-app.post('/stop');
-
-app.get('/state', (req, res) => {});
-
-app.put('/state', (req, res) => {});
-
-/*
-
-// layout shape
-// Physical device pins on which to output data; this results in a
-// contiguous memory map where each pin is driven by a block of memory
-// that corresponds to that pin's pixel count. The keys correspond to
-// the pin header mappings for the BeagleBone Black.
-{
-  pins: {
-    'P9_22': 300,
-    'P9_24': 50
-  }
-}
-
-// channel shape
-// Logical groupings of the physical pixel layout into something meaningful.
-// One pin may power several logical groups of pixels, so animating them is
-// easier if they can be referred to by something sensible.
-{
-  id: 'rooftop',
-  pixels: [{
-    group: 'P9_22', // entry in layout pins
-    offset: 10, // offset in string
-    length: 25 // pixels after offset to use
-  }]
-}
-
-// sequence shape
-{
-  events: [{
-    timestamp: 0, // time at which to perform the action
-    channel: 'rooftop', // channel on which to perform the action
-    action: {
-      type: 'set',
-      duration: 1000
-    }
-  }]
-}
-*/
+app.listen(process.env.PORT || 8080);

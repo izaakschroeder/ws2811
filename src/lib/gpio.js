@@ -1,5 +1,5 @@
 
-import { writeFileSync } from 'fs';
+import { writeFileSync, readFileSync } from 'fs';
 
 const GPIO = [ 0x44E07000, 0x4804c000, 0x481AC000, 0x481AE000 ];
 
@@ -47,18 +47,46 @@ export const pins = [ {
   gpio: 15,
 } ];
 
-pins.forEach(pin => {
-  const index = Math.floor(pin.gpio / 32);
-  pin.mask = (1 << (pin.gpio % (index * 32)));
-  pin.port = GPIO[index];
-  pins[pin.key] = pin;
-});
+export class Pin {
 
-function unuse(name) {
+  constructor({ key, gpio }) {
+    this.key = key;
+    this.gpio = gpio;
+  }
 
+  get port() {
+    return GPIO[Math.floor(this.gpio / 32)];
+  }
+
+  get mask() {
+    return (1 << (this.gpio % 32));
+  }
+
+  get direction() {
+    return readFileSync(`/sys/class/gpio/gpio${this.gpio}/direction`, 'utf8');
+  }
+
+  set direction(direction) {
+    if (direction !== 'in' && direction !== 'out') {
+      throw new TypeError('Invalid direction.');
+    }
+    writeFileSync(
+      `/sys/class/gpio/gpio${this.gpio}/direction`,
+      'utf8',
+      direction
+    );
+  }
+
+  get value() {
+    return parseInt(
+      readFileSync(`/sys/class/gpio/gpio${this.gpio}/value`, 'utf8'),
+      10
+    );
+  }
+
+  set value(value) {
+    writeFileSync(`/sys/class/gpio/gpio${this.gpio}/value`, 'utf8', value);
+  }
 }
 
-export function use(name) {
-  const { gpio } = pins[name];
-  writeFileSync(`/sys/class/gpio/gpio${gpio}/direction`, 'utf8', 'out');
-}
+export default pins.map(Pin);

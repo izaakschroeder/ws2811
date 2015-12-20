@@ -1,14 +1,19 @@
 
 import { Router } from 'express';
+import { json } from 'body-parser';
 
-const layout = new Router();
+import layout from '../../lib/layout';
 
-layout.get('/', (req, res) => {
+const routes = new Router();
 
+routes.use(json());
+
+routes.get('/', (req, res) => {
+  res.status(200).send(layout.get());
 });
 
-layout.post('/', (req, res) => {
-
+routes.post('/', (req, res) => {
+  res.status(200).send(layout.set(req.body));
 });
 
-export default layout;
+export default routes;

@@ -1,26 +1,27 @@
 
 import { Router } from 'express';
+import channel from '../../lib/channel';
 
-const channel = new Router();
+const routes = new Router();
 
-channel.get('/', (req, res) => {
+routes.get('/', (req, res) => {
+  res.send(channel.all());
+});
+
+routes.get('/:channel', (req, res) => {
 
 });
 
-channel.get('/:channel', (req, res) => {
+routes.get('/:channel/state', (req, res) => {
 
 });
 
-channel.get('/:channel/state', (req, res) => {
+routes.put('/:channel', (req, res) => {
 
 });
 
-channel.put('/:channel', (req, res) => {
+routes.put('/:channel/state', (req, res) => {
 
 });
 
-channel.put('/:channel/state', (req, res) => {
-
-});
-
-export default channel;
+export default routes;
