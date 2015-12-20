@@ -1,7 +1,3 @@
-import pruss from 'pruss';
-
-const pru = pruss.prus[0];
-
 const channels = { };
 
 // pixels = [{ pin, offset, length }, ...]

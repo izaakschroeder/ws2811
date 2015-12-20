@@ -1,6 +1,6 @@
 
 import { Router } from 'express';
-import pins from '../../lib/gpio';
+import pins from '../../lib/pins';
 
 const routes = new Router();
 

@@ -3,7 +3,7 @@ import { writeFileSync, readFileSync } from 'fs';
 
 const GPIO = [ 0x44E07000, 0x4804c000, 0x481AC000, 0x481AE000 ];
 
-export const pins = [ {
+const pins = [ {
   key: 'P9_11',
   gpio: 30,
 }, {

@@ -23,7 +23,7 @@ routes.param('pin', (req, res, next, id) => {
 });
 
 routes.patch('/:pin/state', (req, res) => {
-
+  res.send(500);
 });
 
 routes.put('/:pin/state', (req, res) => {
