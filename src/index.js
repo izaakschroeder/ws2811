@@ -1,11 +1,11 @@
+import { indexBy } from 'lodash';
+import pins, { draw } from './lib/pin';
 
-import { set as layout, draw } from './lib/layout';
+const index = indexBy(pins, 'key');
+const pin = index.P9_24;
 
-const res = layout({
-  P9_24: 500,
-});
-
-const pixels = res.pins.P9_24.data;
+pin.enabled = true;
+pin.length = 400;
 
 const colors = [
   0x00FF0000,
@@ -14,10 +14,10 @@ const colors = [
 
 let tick = 0;
 
-setInterval(function() {
+setInterval(() => {
   ++tick;
-  for (let i = 0; i < pixels.length / 4; ++i) {
-    pixels.writeUInt32LE(tick % 2 === 0 ? colors[0] : colors[1], i * 4);
+  for (let i = 0; i < pin.state.length / 4; ++i) {
+    pin.state.writeUInt32LE(tick % 2 === 0 ? colors[0] : colors[1], i * 4);
   }
   draw();
 }, 1000);

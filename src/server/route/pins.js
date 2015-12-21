@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import { json } from 'body-parser';
 import { indexBy } from 'lodash';
-import pins, { sync } from '../../lib/pin';
+import pins from '../../lib/pin';
 
 const routes = new Router();
 const index = indexBy(pins, 'key');
@@ -28,13 +28,11 @@ routes.param('pin', (req, res, next, id) => {
 
 routes.post('/:pin/enable', (req, res) => {
   req.pin.enabled = true;
-  sync();
   res.status(200).send();
 });
 
 routes.post('/:pin/disable', (req, res) => {
   req.pin.enabled = false;
-  sync();
   res.status(200).send();
 });
 
@@ -47,7 +45,6 @@ routes.put('/:pin/length', (req, res, next) => {
     next({ status: 400, error: 'INVALID_TYPE' });
   } else {
     req.pin.length = req.body;
-    sync();
     res.status(200).send();
   }
 });
