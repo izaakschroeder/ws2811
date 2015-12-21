@@ -25,7 +25,10 @@ export default class PixelPin extends Pin {
   }
 
   get length() {
-    return this.allocator.length(this);
+    if (this.enabled) {
+      return this.allocator.length(this);
+    }
+    return null;
   }
 
   set length(length) {
