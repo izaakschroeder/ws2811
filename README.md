@@ -4,11 +4,21 @@ For when you want to power an awful lot of LEDs.
 
 ## Setup
 
-The BeagleBones are configured via ansible. You can download a minimal debian BeagleBone image from [here](http://elinux.org/Beagleboard:BeagleBoneBlack_Debian). Login and ensure python is installed:
+The BeagleBones are configured via ansible. You can download a minimal debian BeagleBone image from [here](http://elinux.org/Beagleboard:BeagleBoneBlack_Debian). Login to each BeagleBone and ensure python is installed:
 
 ```sh
 sudo apt-get update
 sudo apt-get install python
+```
+
+Configure the addresses and logins of your BeagleBones in the inventory file:
+
+```ini
+beaglebone-1
+beaglebone-2
+
+[all:vars]
+ansible_user=debian
 ```
 
 After that, Ansible can take care of the rest:
@@ -17,33 +27,54 @@ After that, Ansible can take care of the rest:
 ansible-playbook -i ansible/inventories/local.ini ansible/main.yml
 ```
 
-NOTE: The Bone's builtin eMMC isn't very fast, so some tasks can take a considerable amount of time. Have a cup of coffee (or two) before deciding it's actually stalled/broken.
+Once installed you'll have an HTTP API available to query and control the LEDs with.
 
-### Layout
+```sh
+curl http://beaglebone-1:8080/
+```
+
+NOTE: The BeagleBone's builtin eMMC isn't very fast, so some tasks can take a considerable amount of time. Have a cup of coffee (or two) before deciding it's actually stalled/broken.
+
+## API
+
+### Pins
 
 Physical device pins on which to output data; this results in a contiguous memory map where each pin is driven by a block of memory that corresponds to that pin's pixel count. The keys correspond to the pin header mappings for the BeagleBone Black.
 
-```js
+`GET /pins` Fetch a list of pins
+```json
 {
-  pins: {
-    'P9_22': 300,
-    'P9_24': 50
+  "P9_22": {
+    "enabled": false,
+    "key": "P9_22",
+    "length": null,
+    "state": null,
+  },
+  "P9_24": {
+    "enabled": true,
+    "key": "P9_24",
+    "length": 5,
+    "state": [ 0, 0, 0, 0, 0 ],
   }
 }
 ```
 
-### Channel
-
-Logical groupings of the physical pixel layout into something meaningful. One pin may power several logical groups of pixels, so animating them is easier if they can be referred to by something sensible.
-
-```js
+`PATCH /pins/P9_24` Enable a single pin
+```json
 {
-  id: 'rooftop',
-  pixels: [{
-    group: 'P9_22', // entry in layout pins
-    offset: 10, // offset in string
-    length: 25 // pixels after offset to use
-  }]
+  "enabled": true,
+  "length": 5,
+}
+```
+
+`PATCH /pins/P9_24` Write pixel data to a pin
+```json
+{
+  "state": [
+    65280,
+    16711680,
+    4278190080,
+  ]
 }
 ```
 
@@ -52,8 +83,15 @@ Logical groupings of the physical pixel layout into something meaningful. One pi
 ```js
 {
   events: [{
-    timestamp: 0, // time at which to perform the action
-    channel: 'rooftop', // channel on which to perform the action
+    // Time at which to perform the action. This time is relative to the start
+    // of the sequence and is in milliseconds.
+    timestamp: 0,
+    // Target on which to perform the action.
+    target: {
+      pin: 'P9_24',
+      offset: 0,
+      length: 25,
+    },
     action: {
       type: 'set',
       duration: 1000
