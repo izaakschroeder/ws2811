@@ -5,6 +5,7 @@ export default class PixelPin extends Pin {
   constructor(params, allocator) {
     super(params);
     this.allocator = allocator;
+    this.saved = null;
   }
 
   get enabled() {
@@ -14,8 +15,14 @@ export default class PixelPin extends Pin {
   set enabled(enable) {
     if (enable) {
       this.allocator.enable(this);
+      if (this.saved) {
+        this.length = this.saved.length;
+        this.saved.copy(this.state);
+      }
       this.direction = 'out';
     } else {
+      this.saved = new Buffer(this.state);
+      this.clear();
       this.allocator.disable(this);
     }
   }
@@ -33,5 +40,9 @@ export default class PixelPin extends Pin {
 
   set length(length) {
     this.allocator.resize(this, length);
+  }
+
+  clear() {
+    this.state.fill(0);
   }
 }

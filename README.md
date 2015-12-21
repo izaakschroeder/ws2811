@@ -2,6 +2,9 @@
 
 For when you want to power an awful lot of LEDs.
 
+TODO:
+ * [ ] Timers (on/off at certain times)
+
 ## Setup
 
 The BeagleBones are configured via ansible. You can download a minimal debian BeagleBone image from [here](http://elinux.org/Beagleboard:BeagleBoneBlack_Debian). Login to each BeagleBone and ensure python is installed:
