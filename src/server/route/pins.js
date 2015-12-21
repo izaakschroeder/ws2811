@@ -103,8 +103,8 @@ routes.patch('/:pin', (req, res) => {
     for (let i = 0; i < patch.state.length; ++i) {
       pin.state.writeUInt32LE(patch.state[i], i * 4);
     }
-    draw();
   }
+  draw();
 
   res.status(200).send(dump(pin));
 });
