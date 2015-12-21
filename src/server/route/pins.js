@@ -7,14 +7,26 @@ import pins from '../../lib/pin';
 const routes = new Router();
 const index = indexBy(pins, 'key');
 
-function pin(pin) {
-  return pick(pin, 'enabled', 'key', 'length');
+function state(pin) {
+  const buf = [ ];
+  for (let i = 0; i < pin.length; ++i) {
+    const color = pin.state.readUInt32LE(i * 4);
+    buf.push(color);
+  }
+  return buf;
+}
+
+function dump(pin) {
+  return {
+    ...pick(pin, 'enabled', 'key', 'length'),
+    state: state(pin),
+  };
 }
 
 routes.use(json());
 
 routes.get('/', (req, res) => {
-  res.status(200).send(mapValues(index, pin));
+  res.status(200).send(mapValues(index, dump));
 });
 
 /**
@@ -30,66 +42,74 @@ routes.param('pin', (req, res, next, id) => {
   }
 });
 
-routes.get('/:pin', (req, res) => {
-  res.status(200).send(pin(req.pin));
-});
-
-routes.post('/:pin/enable', (req, res) => {
-  req.pin.enabled = true;
-  res.status(200).send(pin(req.pin));
-});
-
-routes.post('/:pin/disable', (req, res) => {
-  req.pin.enabled = false;
-  res.status(200).send(pin(req.pin));
-});
-
-routes.put('/:pin/length', (req, res, next) => {
-  if (typeof req.body !== 'number') {
-    next({ status: 400, error: 'INVALID_TYPE' });
-  } else if (req.body < 0 || req.body > 3000) {
-    next({ status: 400, error: 'OUT_OF_BOUNDS', min: 0, max: 3000 });
-  } else if (req.body % 1 !== 0) {
-    next({ status: 400, error: 'INVALID_TYPE' });
-  } else {
-    req.pin.length = req.body;
-    res.status(200).send(pin(req.pin));
-  }
-});
-
-/**
- * Fetch the current pixel data being fed to a pin.
- */
-routes.get('/:pin/state', (req, res) => {
-  const buf = [ ];
-  for (let i = 0; i < req.pin.length; ++i) {
-    const color = req.state.readUInt32LE(i * 4);
-    buf.push(color);
-  }
-  res.send(buf);
-});
-
-/**
- * The simplest update operation. Overwrite all pixel values for a pin. For
- * more complex/nuanced operations use the `PATCH` method.
- */
-routes.put('/:pin/state', (req, res, next) => {
-  const pin = req.pin;
-  if (req.body.length !== pin.length / 4) {
-    next({ status: 400, error: 'INVALID_LENGTH', expected: pin.length });
-  } else {
-    for (let i = 0; i < req.body.length; ++i) {
-      pin.state.writeUInt32LE(req.body[i], i * 4);
+const validators = {
+  length(value) {
+    if (typeof value !== 'number') {
+      throw Object.assign(new TypeError(), {
+        status: 400,
+        error: 'INVALID_TYPE',
+      });
+    } else if (value < 0 || value > 3000) {
+      throw Object.assign(new TypeError(), {
+        status: 400,
+        error: 'OUT_OF_BOUNDS',
+        min: 0,
+        max: 3000,
+      });
+    } else if (value % 1 !== 0) {
+      throw Object.assign(new TypeError(), {
+        status: 400,
+        error: 'INVALID_TYPE',
+      });
     }
-    res.send(200);
+  },
+  enabled(value) {
+    if (typeof value !== 'boolean') {
+      throw Object.assign(new TypeError(), {
+        status: 400,
+        error: 'INVALID_TYPE',
+      });
+    }
+  },
+  state(value) {
+    if (!Array.isArray(value)) {
+      throw Object.assign(new TypeError(), {
+        status: 400,
+        error: 'INVALID_TYPE',
+      });
+    }
+  },
+};
+
+routes.patch('/:pin', (req, res) => {
+  const patch = req.body;
+  const pin = req.pin;
+
+  // Validation
+  Object.keys(patch, key => {
+    if (key in validators) {
+      validators(patch[key]);
+    }
+  });
+
+  // Set
+  if ('length' in patch) {
+    req.pin.length = patch.length;
   }
+  if ('enabled' in patch) {
+    req.pin.enabled = patch.enabled;
+  }
+  if ('state' in patch) {
+    for (let i = 0; i < patch.state.length; ++i) {
+      pin.state.writeUInt32LE(patch.state[i], i * 4);
+    }
+  }
+
+  res.status(200).send(dump(pin));
 });
 
-/**
- *
- */
-routes.patch('/:pin/state', (req, res) => {
-  res.send(500);
+routes.get('/:pin', (req, res) => {
+  res.status(200).send(dump(req.pin));
 });
 
 export default routes;
