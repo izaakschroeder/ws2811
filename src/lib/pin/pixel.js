@@ -17,11 +17,14 @@ export default class PixelPin extends Pin {
       this.allocator.enable(this);
       if (this.saved) {
         this.length = this.saved.length;
-        this.saved.copy(this.state);
+        this.saved.state.copy(this.state);
       }
       this.direction = 'out';
     } else {
-      this.saved = new Buffer(this.state);
+      this.saved = {
+        state: new Buffer(this.state),
+        length: this.length,
+      };
       this.clear();
       this.allocator.disable(this);
     }
