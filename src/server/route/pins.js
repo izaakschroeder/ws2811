@@ -93,11 +93,11 @@ routes.patch('/:pin', (req, res) => {
   });
 
   // Set
-  if ('length' in patch) {
-    req.pin.length = patch.length;
-  }
   if ('enabled' in patch) {
     req.pin.enabled = patch.enabled;
+  }
+  if ('length' in patch) {
+    req.pin.length = patch.length;
   }
   if ('state' in patch) {
     for (let i = 0; i < patch.state.length; ++i) {
