@@ -17,7 +17,7 @@ export function draw() {
 export function enable(state) {
   allocator.swap();
   if (!state) {
-    allocator.buffer.fill(0);
+    allocator.data.fill(0);
   }
   draw();
 }
