@@ -1,6 +1,6 @@
 
 export default class Allocator {
-  constructor(metadata, buffer, flush) {
+  constructor(metadata, buffer) {
     this.pins = { };
     this.metadata = metadata;
     this.index = -1;
@@ -8,7 +8,6 @@ export default class Allocator {
       buffer.slice(0, buffer.length >>> 1),
       buffer.slice(buffer.length >>> 1),
     ];
-    this.flush = flush;
     this.swap();
   }
 

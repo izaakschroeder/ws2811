@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import Allocator from '../../../src/lib/pin/allocator';
+import Allocator from '../../../src/lib/allocator';
 
 describe('Allocator', () => {
   let metadata;

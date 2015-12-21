@@ -1,8 +1,7 @@
-
 import { Router } from 'express';
 import { json } from 'body-parser';
 import { indexBy, pick, mapValues } from 'lodash';
-import pins, { draw } from '../../lib/pin';
+import { pins, draw } from '../../lib/system';
 
 const routes = new Router();
 const index = indexBy(pins, 'key');
@@ -10,7 +9,7 @@ const index = indexBy(pins, 'key');
 function state(pin) {
   const buf = [ ];
   for (let i = 0; i < pin.length; ++i) {
-    const color = pin.state.readUInt32LE(i * 4);
+    const color = pin.state.readUInt32LE(i * 4, true);
     buf.push(color);
   }
   return buf;

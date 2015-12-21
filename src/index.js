@@ -1,5 +1,5 @@
 import { indexBy } from 'lodash';
-import pins, { draw } from './lib/pin';
+import { pins, draw } from './lib/system';
 
 const index = indexBy(pins, 'key');
 const pin = index.P9_24;
