@@ -30,6 +30,10 @@ routes.param('pin', (req, res, next, id) => {
   }
 });
 
+routes.get('/:pin', (req, res) => {
+  res.status(200).send(pin(req.pin));
+});
+
 routes.post('/:pin/enable', (req, res) => {
   req.pin.enabled = true;
   res.status(200).send(pin(req.pin));
@@ -57,7 +61,12 @@ routes.put('/:pin/length', (req, res, next) => {
  * Fetch the current pixel data being fed to a pin.
  */
 routes.get('/:pin/state', (req, res) => {
-  res.send(req.pin.state);
+  const buf = [ ];
+  for (let i = 0; i < req.pin.length; ++i) {
+    const color = req.state.readUInt32LE(i * 4);
+    buf.push(color);
+  }
+  res.send(buf);
 });
 
 /**
