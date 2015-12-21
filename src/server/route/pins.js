@@ -1,16 +1,20 @@
 
 import { Router } from 'express';
 import { json } from 'body-parser';
-import { indexBy } from 'lodash';
+import { indexBy, pick, mapValues } from 'lodash';
 import pins from '../../lib/pin';
 
 const routes = new Router();
 const index = indexBy(pins, 'key');
 
+function pin(pin) {
+  return pick(pin, 'enabled', 'key', 'length');
+}
+
 routes.use(json());
 
 routes.get('/', (req, res) => {
-  res.status(200).send(index);
+  res.status(200).send(mapValues(index, pin));
 });
 
 /**
@@ -28,12 +32,12 @@ routes.param('pin', (req, res, next, id) => {
 
 routes.post('/:pin/enable', (req, res) => {
   req.pin.enabled = true;
-  res.status(200).send();
+  res.status(200).send(pin(req.pin));
 });
 
 routes.post('/:pin/disable', (req, res) => {
   req.pin.enabled = false;
-  res.status(200).send();
+  res.status(200).send(pin(req.pin));
 });
 
 routes.put('/:pin/length', (req, res, next) => {
@@ -45,7 +49,7 @@ routes.put('/:pin/length', (req, res, next) => {
     next({ status: 400, error: 'INVALID_TYPE' });
   } else {
     req.pin.length = req.body;
-    res.status(200).send();
+    res.status(200).send(pin(req.pin));
   }
 });
 
@@ -62,8 +66,8 @@ routes.get('/:pin/state', (req, res) => {
  */
 routes.put('/:pin/state', (req, res, next) => {
   const pin = req.pin;
-  if (req.body.length !== pin.state.length / 4) {
-    next({ status: 400, error: 'INVALID_LENGTH', expected: pin.state.length });
+  if (req.body.length !== pin.length / 4) {
+    next({ status: 400, error: 'INVALID_LENGTH', expected: pin.length });
   } else {
     for (let i = 0; i < req.body.length; ++i) {
       pin.state.writeUInt32LE(req.body[i], i * 4);

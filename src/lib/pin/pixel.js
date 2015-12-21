@@ -4,7 +4,6 @@ export default class PixelPin extends Pin {
 
   constructor(params, allocator) {
     super(params);
-    this.enabled = false;
     this.allocator = allocator;
   }
 
