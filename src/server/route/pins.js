@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import { json } from 'body-parser';
 import { indexBy, pick, mapValues } from 'lodash';
-import pins from '../../lib/pin';
+import pins, { draw } from '../../lib/pin';
 
 const routes = new Router();
 const index = indexBy(pins, 'key');
@@ -103,6 +103,7 @@ routes.patch('/:pin', (req, res) => {
     for (let i = 0; i < patch.state.length; ++i) {
       pin.state.writeUInt32LE(patch.state[i], i * 4);
     }
+    draw();
   }
 
   res.status(200).send(dump(pin));
