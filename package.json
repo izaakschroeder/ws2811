@@ -1,25 +1,26 @@
 {
-	"name": "ws2811",
-	"version": "0.1.0",
-	"main": "lib/ws2811.js",
-	"scripts": {
-		"postinstall": "./node_modules/.bin/babel -d dist src/",
-		"lint": "./node_modules/.bin/eslint --ignore-path .gitignore .",
-		"spec": "./node_modules/.bin/mocha --recursive --compilers js:babel-register test/spec",
+  "name": "ws2811",
+  "version": "0.1.0",
+  "main": "lib/ws2811.js",
+  "scripts": {
+    "postinstall": "./node_modules/.bin/babel -d dist src/",
+    "lint": "./node_modules/.bin/eslint --ignore-path .gitignore .",
+    "spec": "./node_modules/.bin/mocha --recursive --compilers js:babel-register test/spec",
     "test": "npm run lint && npm run spec"
-	},
-	"dependencies": {
-		"pruss": "^0.1.5",
-		"babel-cli": "^6.0.2",
+  },
+  "dependencies": {
+    "babel-cli": "^6.0.2",
     "babel-preset-metalab": "^0.1.2",
-		"body-parser": "^1.14.2",
-		"lodash": "^3.10.1",
-		"express": "^4.13.3"
-	},
-	"devDependencies": {
-		"chai": "^3.4.1",
-		"eslint": "^1.8.0",
+    "body-parser": "^1.14.2",
+    "color": "^0.10.1",
+    "express": "^4.13.3",
+    "lodash": "^3.10.1",
+    "pruss": "^0.1.5"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "eslint": "^1.8.0",
     "eslint-config-metalab": "^1.0.0-rc.1",
-		"mocha": "^2.3.4"
-	}
+    "mocha": "^2.3.4"
+  }
 }

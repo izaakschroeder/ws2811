@@ -1,15 +1,21 @@
 
 import { Router } from 'express';
 import { json } from 'body-parser';
-import { enable } from '../../lib/system';
+import system from '../../lib/system';
 
 const routes = new Router();
 routes.use(json());
 
+routes.get('/', (req, res) => {
+  res.status(200).send({
+    enabled: system.enabled,
+  });
+});
+
 routes.patch('/', (req, res) => {
   const patch = req.body;
   if ('enabled' in patch) {
-    enable(patch.enabled);
+    system.enabled = patch.enabled;
   }
   res.status(200).send({});
 });

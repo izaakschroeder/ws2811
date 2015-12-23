@@ -9,17 +9,48 @@ export const allocator = new Allocator(pru.data, pru.l3);
 export const pins = JSON.parse(readFileSync('./share/pins.json', 'utf8'))
   .map(datum => new Pin(datum, allocator));
 
-export function draw() {
-  pru.reset();
-  pru.enabled = true;
-}
+class System {
 
-export function enable(state) {
-  allocator.swap();
-  if (!state) {
-    allocator.data.fill(0);
+  constructor({ allocator, pru, pins }) {
+    this.allocator = allocator;
+    this.state = new Buffer(this.allocator.data.length);
+    this.state.fill(0);
+    this.pru = pru;
+    this.pins = pins;
+    this.pru.load('./firmware/firmware.bin');
+    this.enabled = true;
   }
-  draw();
+
+  set enabled(on) {
+    if (on) {
+      this.state.copy(this.allocator.data);
+      this._enabled = true;
+    } else {
+      this.state = new Buffer(this.allocator.data);
+      this.allocator.data.fill(0);
+      this._enabled = false;
+    }
+    this.draw();
+  }
+
+  get enabled() {
+    return this._enabled;
+  }
+
+  draw() {
+    this.pru.reset();
+    this.pru.enabled = true;
+  }
 }
 
-pru.load('./firmware/firmware.bin');
+const system = new System({
+  pins,
+  allocator,
+  pru,
+});
+
+process.on('exit', () => {
+  system.enabled = false;
+});
+
+export default system;

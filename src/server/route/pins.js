@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { json } from 'body-parser';
 import { indexBy, pick, mapValues } from 'lodash';
-import { pins, draw } from '../../lib/system';
+import system from '../../lib/system';
 
 const routes = new Router();
-const index = indexBy(pins, 'key');
+const index = indexBy(system.pins, 'key');
 
 function state(pin) {
   const buf = [ ];
@@ -103,7 +103,7 @@ routes.patch('/:pin', (req, res) => {
       pin.state.writeUInt32LE(patch.state[i], i * 4);
     }
   }
-  draw();
+  system.draw();
 
   res.status(200).send(dump(pin));
 });
