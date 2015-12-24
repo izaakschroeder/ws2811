@@ -1,6 +1,5 @@
 import Analyser from 'audio-analyser';
 import { spawn } from 'child_process';
-import { devnull } from 'terminus';
 
 const analyser = new Analyser({
   minFrequency: 20,
@@ -30,12 +29,13 @@ const child = spawn('arecord', [
   '-f', 'cd',
   '-t', 'raw',
 ]);
-const stream = child.stdout.pipe(analyser).pipe(devnull());
-
+const stream = child.stdout.pipe(analyser);
 const buffer = new Uint8Array(analyser.frequencyBinCount);
 
+analyser.on('data', () => analyser.getByteFrequencyData(buffer));
+
 export function getAudioData() {
-  return analyser.getByteFrequencyData(buffer);
+  return buffer;
 }
 
 setInterval(() => {
