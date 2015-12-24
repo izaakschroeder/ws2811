@@ -4,7 +4,6 @@ import raf from 'raf';
 
 import Allocator from './allocator';
 import Pin from './pin/pixel';
-import { getAudioData } from './audio';
 
 export const pru = pruss.prus[0];
 export const allocator = new Allocator(pru.data, pru.l3);

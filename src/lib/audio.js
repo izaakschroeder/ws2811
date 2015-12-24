@@ -8,11 +8,12 @@ const analyser = new Analyser({
   minDecibels: -90,
   maxDecibels: -0,
 
-  fftSize: 1024,
+  fftSize: 512,
+  frequencyBinCount: 512 / 2,
   smoothingTimeConstant: 0.2,
 
   // Maps to `-f cd` for `arecord`
-  bufferSize: 44100,
+  bufferSize: 22052,
   signed: true,
   float: false,
   bitDepth: 16,
@@ -39,6 +40,7 @@ export function getAudioData() {
 }
 
 setInterval(() => {
+  /* eslint no-console: 0 */
   console.log(getAudioData());
 }, 5000);
 
