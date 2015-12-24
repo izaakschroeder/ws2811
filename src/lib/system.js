@@ -37,6 +37,12 @@ class System {
     this.pru.reset();
     this.pru.enabled = true;
     this.enabled = true;
+
+    setInterval(() => {
+      for (let i = 0; i < this.pixels.length; ++i) {
+        this.pixels[i].rotate(1);
+      }
+    }, 30);
   }
 
   set enabled(on) {
@@ -65,10 +71,6 @@ class System {
 
       // Update FPS counter.
       this.stats.fps = 1000 / elapsed;
-
-      for (let i = 0; i < this.pixels.length; ++i) {
-        this.pixels[i].rotate(elapsed);
-      }
 
       // Burn pixel data.
       for (let i = 0; i < this.pixels.length; ++i) {
