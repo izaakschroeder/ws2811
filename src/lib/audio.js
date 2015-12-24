@@ -10,9 +10,25 @@ const analyser = new Analyser({
 
   fftSize: 1024,
   smoothingTimeConstant: 0.2,
+
+  // Maps to `-f cd` for `arecord`
+  bufferSize: 44100,
+  signed: true,
+  float: false,
+  bitDepth: 16,
+  byteOrder: 'LE',
+  channels: 2,
+  interleaved: true,
+
+  // initial channel
+  channel: 0,
 });
 
-const child = spawn('arecord', [ '-D', 'hw:Loopback,1,0', '-f', 'dat' ]);
+const child = spawn('arecord', [
+  '-D', 'hw:Loopback,1,0',
+  '-f', 'cd',
+  '-t', 'raw',
+]);
 const stream = child.stdout.pipe(analyser);
 
 const buffer = new Uint8Array(analyser.frequencyBinCount);
