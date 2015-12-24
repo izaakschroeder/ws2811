@@ -26,7 +26,7 @@ class System {
     for (let i = 0; i < this.state.length; i += 4) {
       this.state.writeUInt32LE(0xFF000000, i);
     }
-    for (let i = 0; i < this.state.length; i += 4) {
+    for (let i = 0; i < 400; i += 4) {
       const color = new Color('red');
       color.rotate(i);
       this.pixels.push(color);
@@ -37,12 +37,6 @@ class System {
     this.pru.reset();
     this.pru.enabled = true;
     this.enabled = true;
-
-    setInterval(() => {
-      for (let i = 0; i < 400; ++i) {
-        this.pixels[i].rotate(1);
-      }
-    }, 10);
   }
 
   set enabled(on) {
@@ -71,6 +65,10 @@ class System {
 
       // Update FPS counter.
       this.stats.fps = 1000 / elapsed;
+
+      for (let i = 0; i < 400; ++i) {
+        this.pixels[i].rotate(elapsed);
+      }
 
       // Burn pixel data.
       for (let i = 0; i < 400; ++i) {
