@@ -28,7 +28,7 @@ class System {
     }
     for (let i = 0; i < 400; ++i) {
       const color = new Color('red');
-      color.rotate(i);
+      color.rotate(i * 4);
       this.pixels.push(color);
     }
     this.pru = pru;
@@ -40,7 +40,7 @@ class System {
 
     setInterval(() => {
       for (let i = 0; i < this.pixels.length; ++i) {
-        this.pixels[i].rotate(1);
+        this.pixels[i].rotate(5);
       }
     }, 30);
   }
