@@ -31,16 +31,18 @@ class System {
   }
 
   set enabled(on) {
-    if (on) {
-      this.state.copy(this.allocator.data);
-      this._enabled = true;
-    } else {
-      this.state = new Buffer(this.allocator.data);
-      this.allocator.data.fill(0);
-      this._enabled = false;
+    if (this._enabled !== !!on) {
+      if (on) {
+        this.state.copy(this.allocator.data);
+        this._enabled = true;
+      } else {
+        this.state = new Buffer(this.allocator.data);
+        this.allocator.data.fill(0);
+        this._enabled = false;
+      }
+      this.draw(); // flush changes
+      this.frame(); // render animations and stuff
     }
-    this.draw(); // flush changes
-    this.frame(); // render animations and stuff
   }
 
   get enabled() {
