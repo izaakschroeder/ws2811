@@ -17,6 +17,10 @@ class System {
     this.allocator = allocator;
     this.state = new Buffer(this.allocator.data.length);
     this.state.fill(0);
+    // set everything to red on init for fun
+    for (let i = 0; i < this.state.length; i += 4) {
+      this.state.writeUInt32LE(0xFF000000, i);
+    }
     this.pru = pru;
     this.pins = pins;
     this.pru.load('./firmware/firmware.bin');
@@ -36,7 +40,8 @@ class System {
       this.allocator.data.fill(0);
       this._enabled = false;
     }
-    this.draw();
+    this.draw(); // flush changes
+    this.frame(); // render animations and stuff
   }
 
   get enabled() {
@@ -44,13 +49,14 @@ class System {
   }
 
   frame() {
-    const now = Date.now();
-    // Update FPS counter.
-    this.stats.fps = 1000 / (now - this.stats.rendered);
-
-    this.draw();
-    this.stats.rendered = now;
     if (this._enabled) {
+      const now = Date.now();
+      // Update FPS counter.
+      this.stats.fps = 1000 / (now - this.stats.rendered);
+
+      this.draw();
+      this.stats.rendered = now;
+
       raf(() => this.frame());
     }
   }
