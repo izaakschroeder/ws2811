@@ -42,7 +42,7 @@ class System {
       for (let i = 0; i < 400; ++i) {
         this.pixels[i].rotate(1);
       }
-    }, 100);
+    }, 10);
   }
 
   set enabled(on) {
