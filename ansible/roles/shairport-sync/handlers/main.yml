@@ -1,0 +1,2 @@
+- name: restart shairport-sync
+  service: name=shairport-sync state=restarted

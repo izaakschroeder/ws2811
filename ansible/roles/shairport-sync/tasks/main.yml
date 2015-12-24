@@ -1,0 +1,32 @@
+- name: install `avahi-daemon`
+  apt: name=avahi-daemon state=latest
+
+- name: ensure ALSA loopback module is loaded
+  modprobe: name=snd-aloop state=present
+
+- name: ensure ALSA loopback module is loaded on boot
+  lineinfile: dest=/etc/modules regexp=^#?snd-aloop line=snd-aloop
+
+# shairport-sync is restarted on configuration change since ALSA configurations
+# are loaded per library instance, not per system.
+- name: set global ALSA configuration
+  template: src=asound.conf dest=/etc/asound.conf
+  notify: restart shairport-sync
+
+- name: install `shairport-sync`
+  script: install.sh
+  register: result
+  changed_when: result.stdout.find("!unchanged!") == -1
+
+- name: ensure shairport-sync group exists
+  group: name=shairport-sync state=present
+
+- name: ensure shairport-sync user exists
+  user: name=shairport-sync state=present group=shairport-sync groups=audio
+
+- name: copy configuration file
+  template: src=shairport-sync.conf dest=/etc/shairport-sync.conf
+  notify: restart shairport-sync
+
+- name: enable shairport-sync
+  service: name=shairport-sync enabled=yes state=started

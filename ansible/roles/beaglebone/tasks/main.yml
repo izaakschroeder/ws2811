@@ -10,12 +10,20 @@
 - name: install `lsb-release`
   apt: name=lsb-release state=latest
 
+# This is necessary, otherwise many commands output piles of gibberish 
+# complaining about missing locale data.
+- name: install `locales`
+  apt: name=locales state=latest
+
 - name: install `git`
   apt: name=git state=latest
 
 # - name: upgrade kernel
 #   shell: /opt/scripts/tools/update_kernel.sh --testing --bone-channel
-#
+
+# - name: enable `cape-universal` on boot
+#   lineinfile: dest=/boot/uEnv.txt regexp=^cape_enable= line=cape_enable=bone_capemgr.enable_partno=cape-universal state=present
+
 # - name: restart machine
 #   shell: "sleep 2; shutdown -r now 'Ansible updates triggered'"
 #   async: 1

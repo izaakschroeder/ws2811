@@ -8,8 +8,11 @@
 - name: ensure ws2811 group exists
   group: name=ws2811 state=present
 
+# The GPIO group is needed to change GPIO state (e.g. direction)
+# The users group is needed to use UIO exposed data for PRUs
+# The audio group is needed to read audio data from the loopback
 - name: ensure ws2811 user exists
-  user: name=ws2811 state=present group=ws2811 groups=gpio,users
+  user: name=ws2811 state=present group=ws2811 groups=gpio,users,audio
 
 - name: create ws2811 data directory
   file: path=/var/lib/ws2811 state=directory owner=ws2811 group=ws2811

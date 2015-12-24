@@ -4,6 +4,8 @@ For when you want to power an awful lot of LEDs.
 
 TODO:
  * [ ] Timers (on/off at certain times)
+ * Ansible install / configure locales
+ * Ansible install / configure cape-universal on boot
 
 Features:
  * Multiple buffering
@@ -14,7 +16,7 @@ The BeagleBones are configured via ansible. You can download a minimal debian Be
 
 ```sh
 sudo apt-get update
-sudo apt-get install python
+sudo apt-get install -y python
 ```
 
 Configure the addresses and logins of your BeagleBones in the inventory file:
