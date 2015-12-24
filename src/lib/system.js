@@ -27,7 +27,7 @@ class System {
       this.state.writeUInt32LE(0xFF000000, i);
     }
     for (let i = 0; i < this.state.length; i += 4) {
-      this.pixels.push(new Color('black'));
+      this.pixels.push(new Color('red'));
     }
     this.pru = pru;
     this.pins = pins;
@@ -69,8 +69,8 @@ class System {
       // Burn pixel data.
       for (let i = 0; i < this.pixels.length; ++i) {
         const [ r, g, b ] = this.pixels[i].rgbArray();
-        const value = ((r << 24) | (g << 16) | (b << 8)) >>> 0;
-        this.allocator.data.writeUInt32LE(value);
+        const value = ((r << 24) | (g << 16) | (b << 8) | 0) >>> 0;
+        this.allocator.data.writeUInt32LE(value, i * 4);
       }
 
       this.draw();
