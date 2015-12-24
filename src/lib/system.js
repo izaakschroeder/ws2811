@@ -1,8 +1,10 @@
 import { readFileSync } from 'fs';
 import pruss from 'pruss';
+import raf from 'raf';
 
 import Allocator from './allocator';
 import Pin from './pin/pixel';
+import { getAudioData } from './audio';
 
 export const pru = pruss.prus[0];
 export const allocator = new Allocator(pru.data, pru.l3);
@@ -19,6 +21,10 @@ class System {
     this.pins = pins;
     this.pru.load('./firmware/firmware.bin');
     this.enabled = true;
+    this.stats = {
+      rendered: 0,
+      fps: 0,
+    };
   }
 
   set enabled(on) {
@@ -35,6 +41,18 @@ class System {
 
   get enabled() {
     return this._enabled;
+  }
+
+  frame() {
+    const now = Date.now();
+    // Update FPS counter.
+    this.stats.fps = 1000 / (now - this.stats.rendered);
+
+    this.draw();
+    this.stats.rendered = now;
+    if (this._enabled) {
+      raf(() => this.frame());
+    }
   }
 
   draw() {

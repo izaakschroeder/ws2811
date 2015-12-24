@@ -4,11 +4,13 @@ For when you want to power an awful lot of LEDs.
 
 TODO:
  * [ ] Timers (on/off at certain times)
- * Ansible install / configure locales
- * Ansible install / configure cape-universal on boot
+ * [ ] Ansible install / configure cape-universal on boot
+ * [ ] Actually run appropriate babel commands
+ * [ ] Better animation
 
 Features:
  * Multiple buffering
+ * Audio output
 
 ## Setup
 
@@ -107,3 +109,6 @@ Physical device pins on which to output data; this results in a contiguous memor
   }]
 }
 ```
+
+## Notes
+ * shairport-sync / ALSA eats about ~10% CPU when streaming

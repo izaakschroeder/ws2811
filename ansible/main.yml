@@ -3,7 +3,7 @@
   roles:
     # - beaglebone
     # - nodejs
-    # - shairport-sync
-    - ws2811
+    - shairport-sync
+    # - ws2811
   vars:
     node_version: 5.2.0

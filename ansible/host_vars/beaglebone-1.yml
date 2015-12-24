@@ -1,0 +1,5 @@
+audio_output_devices:
+  - device: hw:Loopback,0,0
+    channels: 2
+  - device: hw:Device
+    channels: 2
