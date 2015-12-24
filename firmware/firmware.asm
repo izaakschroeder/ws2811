@@ -99,6 +99,5 @@ LIST:
 	// Continue list processing
 	QBA LIST
 
-
 DONE:
-HALT
+QBA START

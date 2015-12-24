@@ -32,6 +32,8 @@ class System {
     this.pru = pru;
     this.pins = pins;
     this.pru.load('./firmware/firmware.bin');
+    this.pru.reset();
+    this.pru.enabled = true;
     this.enabled = true;
 
     setInterval(() => {
@@ -83,8 +85,7 @@ class System {
   }
 
   draw() {
-    this.pru.reset();
-    this.pru.enabled = true;
+
   }
 }
 
