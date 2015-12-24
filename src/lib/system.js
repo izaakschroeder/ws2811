@@ -27,7 +27,9 @@ class System {
       this.state.writeUInt32LE(0xFF000000, i);
     }
     for (let i = 0; i < this.state.length; i += 4) {
-      this.pixels.push(new Color('red'));
+      const color = new Color('red');
+      color.rotate(i);
+      this.pixels.push(color);
     }
     this.pru = pru;
     this.pins = pins;
