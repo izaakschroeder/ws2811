@@ -14,6 +14,10 @@ export const pins = JSON.parse(readFileSync('./share/pins.json', 'utf8'))
 class System {
 
   constructor({ allocator, pru, pins }) {
+    this.stats = {
+      rendered: 0,
+      fps: 0,
+    };
     this.allocator = allocator;
     this.state = new Buffer(this.allocator.data.length);
     this.state.fill(0);
@@ -25,10 +29,6 @@ class System {
     this.pins = pins;
     this.pru.load('./firmware/firmware.bin');
     this.enabled = true;
-    this.stats = {
-      rendered: 0,
-      fps: 0,
-    };
   }
 
   set enabled(on) {

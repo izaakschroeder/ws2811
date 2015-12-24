@@ -112,3 +112,4 @@ Physical device pins on which to output data; this results in a contiguous memor
 
 ## Notes
  * shairport-sync / ALSA eats about ~10% CPU when streaming
+ * jinja2 has stupid scoping http://stackoverflow.com/questions/21489665
