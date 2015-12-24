@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import pruss from 'pruss';
 import raf from 'raf';
+import Color from 'color';
 
 import Allocator from './allocator';
 import Pin from './pin/pixel';
@@ -17,12 +18,16 @@ class System {
       rendered: 0,
       fps: 0,
     };
+    this.pixels = new Array();
     this.allocator = allocator;
     this.state = new Buffer(this.allocator.data.length);
     this.state.fill(0);
     // set everything to red on init for fun
     for (let i = 0; i < this.state.length; i += 4) {
       this.state.writeUInt32LE(0xFF000000, i);
+    }
+    for (let i = 0; i < this.state.length; i += 4) {
+      this.pixels.push(new Color('black'));
     }
     this.pru = pru;
     this.pins = pins;
@@ -52,8 +57,21 @@ class System {
   frame() {
     if (this._enabled) {
       const now = Date.now();
+      const elapsed = now - this.stats.rendered;
+
       // Update FPS counter.
-      this.stats.fps = 1000 / (now - this.stats.rendered);
+      this.stats.fps = 1000 / elapsed;
+
+      for (let i = 0; i < this.pixels.length; ++i) {
+        this.pixels[i].rotate(elapsed / 500);
+      }
+
+      // Burn pixel data.
+      for (let i = 0; i < this.pixels.length; ++i) {
+        const [ r, g, b ] = this.pixels[i].rgbArray();
+        const value = ((r << 24) | (g << 16) | (b << 8)) >>> 0;
+        this.allocator.data.writeUInt32LE(value);
+      }
 
       this.draw();
       this.stats.rendered = now;
