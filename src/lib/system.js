@@ -63,7 +63,7 @@ class System {
       this.stats.fps = 1000 / elapsed;
 
       for (let i = 0; i < 400; ++i) {
-        this.pixels[i].rotate(Math.floor(elapsed / 500));
+        this.pixels[i].rotate(elapsed / 500);
       }
 
       // Burn pixel data.
