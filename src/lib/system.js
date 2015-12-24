@@ -26,7 +26,7 @@ class System {
     for (let i = 0; i < this.state.length; i += 4) {
       this.state.writeUInt32LE(0xFF000000, i);
     }
-    for (let i = 0; i < 400; i += 4) {
+    for (let i = 0; i < 400; ++i) {
       const color = new Color('red');
       color.rotate(i);
       this.pixels.push(color);
