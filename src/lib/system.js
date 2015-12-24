@@ -66,12 +66,12 @@ class System {
       // Update FPS counter.
       this.stats.fps = 1000 / elapsed;
 
-      for (let i = 0; i < 400; ++i) {
+      for (let i = 0; i < this.pixels.length; ++i) {
         this.pixels[i].rotate(elapsed);
       }
 
       // Burn pixel data.
-      for (let i = 0; i < 400; ++i) {
+      for (let i = 0; i < this.pixels.length; ++i) {
         const [ r, g, b ] = this.pixels[i].rgbArray();
         const value = ((r << 24) | (g << 16) | (b << 8) | 0) >>> 0;
         this.allocator.data.writeUInt32LE(value, i * 4);
