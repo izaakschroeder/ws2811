@@ -9,6 +9,7 @@ routes.use(json());
 routes.get('/', (req, res) => {
   res.status(200).send({
     enabled: system.enabled,
+    fps: system.stats.fps,
   });
 });
 
