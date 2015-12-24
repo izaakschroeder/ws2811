@@ -33,6 +33,12 @@ class System {
     this.pins = pins;
     this.pru.load('./firmware/firmware.bin');
     this.enabled = true;
+
+    setInterval(() => {
+      for (let i = 0; i < 400; ++i) {
+        this.pixels[i].rotate(1);
+      }
+    }, 100);
   }
 
   set enabled(on) {
@@ -61,10 +67,6 @@ class System {
 
       // Update FPS counter.
       this.stats.fps = 1000 / elapsed;
-
-      for (let i = 0; i < 400; ++i) {
-        this.pixels[i].rotate(elapsed / 500);
-      }
 
       // Burn pixel data.
       for (let i = 0; i < 400; ++i) {
